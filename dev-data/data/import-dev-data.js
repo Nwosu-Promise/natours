@@ -58,4 +58,4 @@ if (process.argv[2] === '--import' || process.argv[2] === '--imp') {
   deleteData();
 }
 
-console.log(process.argv);
+// console.log(process.argv);

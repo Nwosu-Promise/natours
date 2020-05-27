@@ -6,12 +6,17 @@ process.on('uncaughtException', err => {
   console.log(err.name, err.message);
   process.exit(1);
 });
-
+// TODO CONNECT TO MONGODB ATLAS AND EXPORT THE LOCAL DATAT THERE
 dotenv.config({ path: './config.env' });
 const app = require('./app');
 
+const DB = process.env.DATABASE.replace(
+  '<PASSWORD>',
+  process.env.DATABASE_PASSWORD
+);
+
 mongoose
-  .connect(process.env.DATABASE, {
+  .connect(DB, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,

@@ -29,20 +29,19 @@ const handleValidationErrorDB = err => {
 const sendErrorDev = (err, req, res) => {
   // A) API
   if (req.originalUrl.startsWith('/api')) {
-    res.status(err.statusCode).json({
+    return res.status(err.statusCode).json({
       status: err.status,
       error: err,
       message: err.message,
       stack: err.stack,
     });
-    console.error('ERROR 💣', err);
-  } else {
-    // B) RENDERED WEBSITE
-    res.status(err.statusCode).render('error', {
-      title: 'Something went wrong',
-      msg: err.message,
-    });
   }
+  // B) RENDERED WEBSITE
+  console.error('ERROR 💣', err);
+  return res.status(err.statusCode).render('error', {
+    title: 'Something went wrong',
+    msg: err.message,
+  });
 };
 
 const sendErrorProd = (err, req, res) => {
@@ -50,7 +49,7 @@ const sendErrorProd = (err, req, res) => {
   if (req.originalUrl.startsWith('/api')) {
     // A) Operational error, trusted error: send message to client
     if (err.isOperational) {
-      res.status(err.statusCode).json({
+      return res.status(err.statusCode).json({
         status: err.status,
         message: err.message,
       });
@@ -59,7 +58,7 @@ const sendErrorProd = (err, req, res) => {
     // 1} Log error
     console.error('ERROR 💣', err);
     // 2) Send generic message
-    res.status(500).json({
+    return res.status(500).json({
       status: 'error',
       message: 'Something went very wrong',
     });
